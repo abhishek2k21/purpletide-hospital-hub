@@ -29,6 +29,7 @@ import Documents from "@/pages/Documents";
 import Settings from "@/pages/Settings";
 import NotFound from "./pages/NotFound";
 import UserProfile from "./pages/UserProfile";
+import ComingSoon from "./components/shared/ComingSoon";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -55,15 +56,46 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route element={<MainLayout />}>
                 <Route path="/" element={<Dashboard />} />
+                
+                {/* Patient Routes */}
                 <Route path="/patients" element={<Patients />} />
                 <Route path="/patients/:id" element={<PatientDetail />} />
+                <Route path="/patients/add" element={<ComingSoon pageName="Add Patient" />} />
+                
+                {/* Appointment Routes */}
                 <Route path="/appointments" element={<Appointments />} />
+                <Route path="/appointments/calendar" element={<ComingSoon pageName="Appointment Calendar" />} />
+                
+                {/* Pharmacy Routes */}
                 <Route path="/pharmacy" element={<Pharmacy />} />
+                <Route path="/pharmacy/stock" element={<ComingSoon pageName="Pharmacy Stock" />} />
+                <Route path="/pharmacy/orders" element={<ComingSoon pageName="Pharmacy Orders" />} />
+                
+                {/* Inventory Routes */}
                 <Route path="/inventory" element={<Inventory />} />
+                <Route path="/inventory/suppliers" element={<ComingSoon pageName="Inventory Suppliers" />} />
+                
+                {/* Billing Routes */}
                 <Route path="/billing" element={<Billing />} />
-                <Route path="/reports" element={<Reports />} />
+                <Route path="/billing/invoices" element={<ComingSoon pageName="Billing Invoices" />} />
+                <Route path="/billing/payments" element={<ComingSoon pageName="Billing Payments" />} />
+                
+                {/* Report Routes */}
+                <Route path="/reports" element={<Navigate to="/reports/daily" replace />} />
+                <Route path="/reports/daily" element={<ComingSoon pageName="Daily Reports" />} />
+                <Route path="/reports/monthly" element={<ComingSoon pageName="Monthly Reports" />} />
+                <Route path="/reports/custom" element={<ComingSoon pageName="Custom Reports" />} />
+                
+                {/* Document Routes */}
                 <Route path="/documents" element={<Documents />} />
+                <Route path="/documents/upload" element={<ComingSoon pageName="Document Upload" />} />
+                
+                {/* Settings Routes */}
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/settings/general" element={<ComingSoon pageName="General Settings" />} />
+                <Route path="/settings/roles" element={<ComingSoon pageName="Role Management" />} />
+                <Route path="/settings/permissions" element={<ComingSoon pageName="Permission Management" />} />
+                
                 <Route path="/profile" element={<UserProfile />} />
               </Route>
             </Route>
