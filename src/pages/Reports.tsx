@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { 
   Bar, 
   BarChart, 
@@ -10,9 +11,11 @@ import {
   PieChart, 
   ResponsiveContainer, 
   Sector, 
-  Tooltip, 
+  Tooltip as RechartsTooltip, 
   XAxis, 
-  YAxis 
+  YAxis,
+  Area,
+  AreaChart
 } from "recharts";
 import { 
   BarChart3, 
@@ -23,8 +26,35 @@ import {
   Filter,
   LineChart as LineChartIcon,
   PieChart as PieChartIcon,
-  Search
+  Search,
+  Share2,
+  Printer
 } from "lucide-react";
+import { motion } from "framer-motion";
+import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
+import { cn } from "@/lib/utils";
+
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 
 // Revenue data
 const revenueData = [
@@ -178,7 +208,7 @@ export default function Reports() {
                   !date && "text-muted-foreground"
                 )}
               >
-                <CalIcon className="mr-2 h-4 w-4" />
+                <CalendarIcon className="mr-2 h-4 w-4" />
                 {date?.from ? (
                   date.to ? (
                     <>
@@ -254,14 +284,14 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsLineChart data={revenueData}>
+                <LineChart data={revenueData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Line type="monotone" dataKey="amount" stroke="#8884d8" activeDot={{ r: 8 }} />
-                </RechartsLineChart>
+                </LineChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
@@ -275,14 +305,14 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsBarChart data={revenueData}>
+                <BarChart data={revenueData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Bar dataKey="amount" fill="#82ca9d" />
-                </RechartsBarChart>
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
@@ -298,14 +328,14 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsLineChart data={appointmentData}>
+                <LineChart data={appointmentData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} />
-                </RechartsLineChart>
+                </LineChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
@@ -319,14 +349,14 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsBarChart data={appointmentData}>
+                <BarChart data={appointmentData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Bar dataKey="count" fill="#82ca9d" />
-                </RechartsBarChart>
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
@@ -346,7 +376,7 @@ export default function Reports() {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Area type="monotone" dataKey="occupancy" stroke="#8884d8" fill="#8884d8" />
                 </AreaChart>
@@ -363,14 +393,14 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsBarChart data={bedUsageData}>
+                <BarChart data={bedUsageData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Bar dataKey="occupancy" fill="#82ca9d" />
-                </RechartsBarChart>
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
@@ -386,14 +416,14 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsBarChart data={departmentData}>
+                <BarChart data={departmentData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Bar dataKey="revenue" fill="#82ca9d" />
-                </RechartsBarChart>
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
@@ -407,14 +437,14 @@ export default function Reports() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsBarChart data={departmentData}>
+                <BarChart data={departmentData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                   <Bar dataKey="patients" fill="#8884d8" />
-                </RechartsBarChart>
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
