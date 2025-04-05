@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/select";
 import {
   ChevronDownIcon,
-  DotsHorizontalIcon,
+  MoreHorizontal,
   PlusIcon,
   SearchIcon,
   SlashIcon,
@@ -186,8 +186,15 @@ export default function Patients() {
 
   const onSubmit = (data: NewPatientFormValues) => {
     const newPatient = {
-      ...data,
       id: patientsList.length + 1,
+      name: data.name,
+      email: data.email,
+      dob: data.dob,
+      gender: data.gender,
+      phone: data.phone,
+      bloodType: data.bloodType,
+      address: data.address,
+      status: data.status,
     };
     setPatientsList([newPatient, ...patientsList]);
     toast.success("Patient added successfully");
@@ -359,7 +366,7 @@ export default function Patients() {
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="icon">
-                                <DotsHorizontalIcon className="h-4 w-4" />
+                                <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
