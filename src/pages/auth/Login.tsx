@@ -16,9 +16,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import { Hospital, Loader2, LockKeyhole, Mail } from "lucide-react";
 import { ModeToggle } from "@/components/theme/ModeToggle";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { userAccounts } from "@/data/userData";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -30,6 +32,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function Login() {
   const { signIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const form = useForm<LoginFormValues>({
@@ -41,12 +44,13 @@ export default function Login() {
   });
 
   async function onSubmit(data: LoginFormValues) {
+    setError("");
     setIsLoading(true);
     try {
       await signIn(data.email, data.password);
       navigate("/");
-    } catch (error) {
-      // Error is handled by useAuth hook
+    } catch (error: any) {
+      setError(error.message || "Failed to sign in");
     } finally {
       setIsLoading(false);
     }
@@ -65,14 +69,21 @@ export default function Login() {
           transition={{ duration: 0.3 }}
           className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-lg"
         >
-          <div className="flex flex-col space-y-2 text-center mb-8">
+          <div className="flex flex-col items-center space-y-2 text-center mb-8">
+            <Hospital className="h-10 w-10 text-violet-600 dark:text-violet-400" />
             <h1 className="text-2xl font-bold tracking-tight text-violet-600 dark:text-violet-400">
-              Hospital Management System
+              Arogya Healthcare System
             </h1>
             <p className="text-sm text-muted-foreground">
               Enter your credentials to access your account
             </p>
           </div>
+
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
           <Form {...form}>
             <form
@@ -86,13 +97,17 @@ export default function Login() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="your.email@example.com"
-                        type="email"
-                        autoComplete="email"
-                        disabled={isLoading}
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="your.email@example.com"
+                          type="email"
+                          autoComplete="email"
+                          disabled={isLoading}
+                          className="pl-10"
+                          {...field}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -113,13 +128,17 @@ export default function Login() {
                       </Link>
                     </div>
                     <FormControl>
-                      <Input
-                        placeholder="••••••••"
-                        type="password"
-                        autoComplete="current-password"
-                        disabled={isLoading}
-                        {...field}
-                      />
+                      <div className="relative">
+                        <LockKeyhole className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="••••••••"
+                          type="password"
+                          autoComplete="current-password"
+                          disabled={isLoading}
+                          className="pl-10"
+                          {...field}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -151,11 +170,21 @@ export default function Login() {
           {/* Demo account info */}
           <div className="mt-8 border-t border-border pt-4">
             <p className="text-xs text-center text-muted-foreground mb-2">
-              Demo Account
+              Demo Accounts
             </p>
-            <div className="text-xs text-muted-foreground text-center">
-              <p>Email: admin@hospital.com</p>
-              <p>Password: password123</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-muted-foreground mt-2">
+              {userAccounts.map((account) => (
+                <div key={account.id} className="p-2 border rounded-md hover:bg-accent transition-colors cursor-pointer" onClick={() => {
+                  form.setValue('email', account.email);
+                  form.setValue('password', account.password);
+                }}>
+                  <div className="font-medium">{account.name}</div>
+                  <div className="text-xs opacity-70">{account.email}</div>
+                  <div className="text-xs capitalize text-violet-500 mt-1">
+                    {account.role} - {account.department}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>

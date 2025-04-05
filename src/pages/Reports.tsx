@@ -1,48 +1,30 @@
-import { useState } from "react";
-import { format } from "date-fns";
-import { motion } from "framer-motion";
-import { Calendar } from "@/components/ui/calendar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { 
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  BarChart,
-  BarList,
-  Calendar as CalIcon,
-  Download,
-  LineChart,
-  Printer,
-  Share2
-} from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart as RechartsBarChart,
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart as RechartsLineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+  Bar, 
+  BarChart, 
+  CartesianGrid, 
+  Legend, 
+  Line, 
+  LineChart, 
+  Pie, 
+  PieChart, 
+  ResponsiveContainer, 
+  Sector, 
+  Tooltip, 
+  XAxis, 
+  YAxis 
 } from "recharts";
-import { cn } from "@/lib/utils";
-import { DateRange } from "react-day-picker";
+import { 
+  BarChart3, 
+  Calendar as CalendarIcon,
+  ChevronDown,
+  Download,
+  FileText,
+  Filter,
+  LineChart as LineChartIcon,
+  PieChart as PieChartIcon,
+  Search
+} from "lucide-react";
 
 // Revenue data
 const revenueData = [

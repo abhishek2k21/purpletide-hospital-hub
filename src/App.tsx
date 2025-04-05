@@ -28,6 +28,7 @@ import Reports from "@/pages/Reports";
 import Documents from "@/pages/Documents";
 import Settings from "@/pages/Settings";
 import NotFound from "./pages/NotFound";
+import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,6 +64,7 @@ const App = () => (
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/documents" element={<Documents />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/profile" element={<UserProfile />} />
               </Route>
             </Route>
 
