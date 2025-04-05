@@ -43,10 +43,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Badge,
-  Separator,
-} from "@/components/ui";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { formatDistanceToNow } from "date-fns";
 
 // Define the inventory item schema
