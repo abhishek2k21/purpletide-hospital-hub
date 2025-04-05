@@ -273,9 +273,9 @@ export default function Inventory() {
       return <Badge variant="destructive">Out of Stock</Badge>;
     }
     if (item.reorder_level && item.quantity <= item.reorder_level) {
-      return <Badge variant="warning" className="bg-amber-500">Low Stock</Badge>;
+      return <Badge className="bg-amber-500">Low Stock</Badge>;
     }
-    return <Badge variant="success" className="bg-green-500">In Stock</Badge>;
+    return <Badge className="bg-green-500">In Stock</Badge>;
   };
 
   return (
@@ -507,7 +507,7 @@ export default function Inventory() {
                   <SelectValue placeholder="Stock Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Status</SelectItem>
+                  <SelectItem value="All">All Status</SelectItem>
                   <SelectItem value="In Stock">In Stock</SelectItem>
                   <SelectItem value="Low Stock">Low Stock</SelectItem>
                   <SelectItem value="Out of Stock">Out of Stock</SelectItem>
