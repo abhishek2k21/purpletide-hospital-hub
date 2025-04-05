@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +34,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Box, Clock, Filter, GridIcon, ListBullet, PackageCheck, PackageSearch, Plus, Search } from "lucide-react";
+import { Box, Clock, Filter, GridIcon, List, PackageCheck, PackageSearch, Plus, Search } from "lucide-react";
 
 // Indian medication data with generic and brand names
 const initialMedications = [
@@ -267,7 +266,15 @@ export default function Pharmacy() {
   const onSubmit = (data: MedicineFormValues) => {
     const newMedicine = {
       id: medications.length + 1,
-      ...data,
+      name: data.name,
+      brandName: data.brandName,
+      category: data.category,
+      stock: data.stock,
+      price: data.price,
+      expiry: data.expiry,
+      manufacturer: data.manufacturer,
+      description: data.description || "",
+      dosage: data.dosage,
       lowStock: data.stock < stockThreshold,
     };
     
@@ -303,7 +310,7 @@ export default function Pharmacy() {
               onClick={() => setView("list")}
               className={view === "list" ? "bg-accent" : ""}
             >
-              <ListBullet className="h-4 w-4" />
+              <List className="h-4 w-4" />
             </Button>
             <Button onClick={() => setOpenNewMedicine(true)}>
               <Plus className="h-4 w-4 mr-2" />

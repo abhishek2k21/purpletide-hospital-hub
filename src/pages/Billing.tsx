@@ -363,6 +363,12 @@ export default function Billing() {
       return;
     }
     
+    // Ensure all items have required properties
+    const validatedItems = data.items.map(item => ({
+      description: item.description,
+      amount: item.amount
+    }));
+    
     const newInvoice = {
       id: `INV-2024-${String(invoices.length + 1).padStart(4, "0")}`,
       patientId: data.patientId,
@@ -372,7 +378,7 @@ export default function Billing() {
       amount: total,
       status: data.status,
       paymentMethod: data.paymentMethod,
-      items: data.items,
+      items: validatedItems,
       discount: data.discount || 0,
       tax: data.tax || 0,
     };
