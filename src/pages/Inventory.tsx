@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,7 +46,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatDistanceToNow } from "date-fns";
 
-// Define the inventory item schema
 const inventoryItemSchema = z.object({
   item_name: z.string().min(2, "Item name is required"),
   category: z.string().min(1, "Category is required"),
@@ -121,7 +119,6 @@ export default function Inventory() {
     },
   });
 
-  // Fetch inventory data
   const fetchInventory = async () => {
     setLoading(true);
     try {
@@ -147,11 +144,9 @@ export default function Inventory() {
     fetchInventory();
   }, []);
 
-  // Apply filters
   useEffect(() => {
     let filtered = [...inventory];
     
-    // Apply search term
     if (searchTerm) {
       filtered = filtered.filter(item => 
         item.item_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -160,12 +155,10 @@ export default function Inventory() {
       );
     }
     
-    // Apply category filter
     if (categoryFilter && categoryFilter !== "All") {
       filtered = filtered.filter(item => item.category === categoryFilter);
     }
     
-    // Apply stock status filter
     if (stockStatus) {
       if (stockStatus === "Low Stock") {
         filtered = filtered.filter(item => 
@@ -184,15 +177,15 @@ export default function Inventory() {
     setFilteredInventory(filtered);
   }, [inventory, searchTerm, categoryFilter, stockStatus]);
 
-  // Handle add item form submission
   const onSubmitAdd = async (data: z.infer<typeof inventoryItemSchema>) => {
     try {
       const { error } = await supabase
         .from("inventory")
-        .insert([{
+        .insert({
           ...data,
+          item_name: data.item_name,
           last_restocked: new Date().toISOString()
-        }]);
+        });
       
       if (error) throw error;
       
@@ -205,7 +198,6 @@ export default function Inventory() {
     }
   };
 
-  // Handle edit item form submission
   const onSubmitEdit = async (data: z.infer<typeof inventoryItemSchema>) => {
     if (!selectedItem) return;
     
@@ -214,6 +206,7 @@ export default function Inventory() {
         .from("inventory")
         .update({
           ...data,
+          item_name: data.item_name,
           updated_at: new Date().toISOString(),
           last_restocked: data.quantity !== selectedItem.quantity ? new Date().toISOString() : selectedItem.last_restocked
         })
@@ -231,7 +224,6 @@ export default function Inventory() {
     }
   };
 
-  // Handle delete item
   const handleDeleteItem = async (id: string) => {
     if (!confirm("Are you sure you want to delete this item?")) return;
     
@@ -250,7 +242,6 @@ export default function Inventory() {
     }
   };
 
-  // Set up edit form when an item is selected
   useEffect(() => {
     if (selectedItem) {
       editForm.reset({
@@ -267,7 +258,6 @@ export default function Inventory() {
     }
   }, [selectedItem, editForm]);
 
-  // Get stock status for an item
   const getStockStatus = (item: InventoryItem) => {
     if (item.quantity === 0) {
       return <Badge variant="destructive">Out of Stock</Badge>;
@@ -500,8 +490,8 @@ export default function Inventory() {
                 </SelectContent>
               </Select>
               <Select
-                value={stockStatus || ""}
-                onValueChange={(value) => setStockStatus(value || null)}
+                value={stockStatus || "All"}
+                onValueChange={(value) => setStockStatus(value === "All" ? null : value)}
               >
                 <SelectTrigger className="w-[150px]">
                   <SelectValue placeholder="Stock Status" />
@@ -591,7 +581,6 @@ export default function Inventory() {
         </CardContent>
       </Card>
 
-      {/* Edit Item Dialog */}
       <Dialog open={isEditItemDialogOpen} onOpenChange={setIsEditItemDialogOpen}>
         <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>

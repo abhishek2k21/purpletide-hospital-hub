@@ -117,7 +117,8 @@ const SelectItem = React.forwardRef<
   // Make sure the value is always defined and not an empty string
   if (props.value === "") {
     console.warn("SelectItem must have a non-empty value prop");
-    props.value = props.children?.toString() || "placeholder";
+    // Use a safe default value instead of trying to access children
+    props.value = "placeholder";
   }
 
   return (
