@@ -12,7 +12,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  // This is the problematic line, useNavigate is used outside of Router context
   const navigate = useNavigate();
 
   const login = async (username: string, password: string) => {
